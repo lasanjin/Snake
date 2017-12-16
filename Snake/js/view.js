@@ -5,8 +5,8 @@ function drawBoard() {
             fillRect(col, row, 0);
         }
     }
-    context.fillStyle = "#636363";
-    context.font = "20px Arial";
+    context.fillStyle = "#717171";
+    context.font = "15px Arial";
     context.fillText("" + (snake.length - 1), 5, canvas.height - 10);
 }
 
