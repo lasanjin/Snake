@@ -7,7 +7,7 @@ function drawBoard() {
     }
     context.fillStyle = "#636363";
     context.font = "20px Arial";
-    context.fillText("score: " + (snake.length - 1), 5, canvas.height - 10);
+    context.fillText("" + (snake.length - 1), 5, canvas.height - 10);
 }
 
 function drawSnake() {
