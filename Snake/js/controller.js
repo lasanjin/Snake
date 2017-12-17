@@ -1,10 +1,17 @@
 let previous;
+const keys = [];
 
 document.addEventListener("keydown", function (event) {
     let key = event.keyCode;
     if (checkDirection(key)) {
         previous = key;
-        switch (key) {
+        keys.push(key);
+    }
+});
+
+function actOnKeys() {
+    while (keys.length > 0) {
+        switch (keys[0]) {
             case 37: //LEFT
                 snake.direction(-1, 0);
                 break;
@@ -20,8 +27,9 @@ document.addEventListener("keydown", function (event) {
             default:
                 break;
         }
+        keys.pop();
     }
-});
+}
 
 function checkDirection(key) {
     switch (previous) {

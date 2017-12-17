@@ -5,8 +5,17 @@ let tick;
 initGame();
 run();
 
+function initGame() {
+    snake = new Snake(board.width / 2, board.height / 2);
+    drawFrame();
+    placeFood();
+    tick = 0;
+}
+
 function run() {
     if (tick > interval) {
+        actOnKeys();
+
         if (isGameOver()) {
             initGame();
         }
@@ -25,23 +34,16 @@ function run() {
     requestAnimationFrame(run);
 }
 
-function initGame() {
-    snake = new Snake(board.width / 2, board.height / 2);
-    placeFood();
-    tick = 0;
-}
-
 function draw() {
     drawBoard();
+    updateScore();
     drawFood(food.x, food.y);
     drawSnake(snake.x, snake.y);
 }
 
 function isGameOver() {
     for (let i = 1; i < snake.length - 1; i++) {
-        let x = snake.tail[i].x;
-        let y = snake.tail[i].y;
-        if (isSnake(snake.x, snake.y, x, y)) {
+        if (isSnake(snake.x, snake.y, snake.tail[i].x, snake.tail[i].y)) {
             return true;
         }
     }
@@ -53,22 +55,25 @@ function isSnake(newX, newY, x, y) {
 }
 
 function isOutOfBounds() {
-    return (snake.x < 0 || snake.x >= board.width
-        || snake.y < 0 || snake.y >= board.height);
+    return (snake.x < offset || snake.x >= board.width - offset
+        || snake.y < offset || snake.y >= board.height - offset);
 }
 
+/**
+ * Border is shifted by 1 in order to draw frame.
+ */
 function goThroughWall() {
-    if (snake.x < 0) {
-        snake.x = board.width - 1;
+    if (snake.x < offset) {
+        snake.x = board.width - 1 - offset;
     }
-    if (snake.x >= board.width) {
-        snake.x = 0;
+    if (snake.x >= board.width - offset) {
+        snake.x = offset;
     }
-    if (snake.y < 0) {
-        snake.y = board.height - 1;
+    if (snake.y < offset) {
+        snake.y = board.height - 1 - offset;
     }
-    if (snake.y >= board.height) {
-        snake.y = 0;
+    if (snake.y >= board.height - offset) {
+        snake.y = offset;
     }
 }
 
@@ -77,12 +82,24 @@ function isFood() {
 }
 
 function placeFood() {
-    food = {
-        x: randomPos(),
-        y: randomPos()
+    do {
+        food = {
+            x: randomPos(),
+            y: randomPos()
+        }
     }
+    while (!isEmpty(food.x, food.y));
+}
+
+function isEmpty(x, y) {
+    for (let i = 0; i < snake.length; i++) {
+        if (isSnake(snake.tail[i].x, snake.tail[i].y, x, y)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 function randomPos() {
-    return Math.floor((Math.random() * board.width));
+    return Math.floor((Math.random() * (board.width - (2 * offset))) + offset);
 }

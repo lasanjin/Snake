@@ -1,36 +1,61 @@
-function drawBoard() {
+function drawFrame() {
+    fillStyle("#3b3b3b");
     for (let row = 0; row < board.height; row++) {
         for (let col = 0; col < board.width; col++) {
-            context.fillStyle = "#000";
-            fillRect(col, row, 0);
+            if (col === 0 || col === board.width - 1) {
+                fillRect(col, row, 1, -2);
+            }
+            if (row === 0 || row === board.height - 1) {
+                fillRect(col, row, 1, -2);
+            }
         }
     }
-    context.fillStyle = "#717171";
-    context.font = "15px Arial";
-    context.fillText("" + (snake.length - 1), 5, canvas.height - 10);
+}
+
+function drawBoard() {
+    for (let row = 0; row < board.height - (2 * offset); row++) {
+        for (let col = 0; col < board.width - (2 * offset); col++) {
+            fillStyle("#000");
+            fillRect(col, row, offsetBoard, 0);
+        }
+    }
+}
+
+function drawScore() {
+
+}
+
+function updateScore() {
+    fillStyle("#828282");
+    context.font = "16px Arial";
+    context.fillText("" + (snake.length - 1), 25, canvas.height - 27);
 }
 
 function drawSnake() {
-    context.fillStyle = "#0bac0a";
+    fillStyle("#0bac0a");
     for (let i = 0; i < snake.length; i++) {
-        if(i === snake.length - 1) {
-            context.fillStyle = "#d1d1d1";
+        if (i === snake.length - 1) {
+            fillStyle("#d1d1d1");
         }
-        fillRect(snake.tail[i].x, snake.tail[i].y, 1.5);
+        fillRect(snake.tail[i].x, snake.tail[i].y, 1, -2);
     }
 }
 
 function drawFood(x, y) {
-    context.fillStyle = "#bf1020";
-    fillRect(x, y, 1.5);
-    context.fillStyle = "#cf1f0a";
-    fillRect(x, y, 6);
+    fillStyle("#bf1020");
+    fillRect(x, y, 1, -2);
+    fillStyle("#e3220b");
+    fillRect(x, y, 6, -12);
 }
 
-function fillRect(x, y, dx) {
+function fillRect(x, y, dx, dy) {
     context.fillRect(
         (x * scale) + dx,
         (y * scale) + dx,
-        scale - (2 * dx),
-        scale - (2 * dx));
+        scale + dy,
+        scale + dy);
+}
+
+function fillStyle(color) {
+    context.fillStyle = color;
 }
