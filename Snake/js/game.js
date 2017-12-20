@@ -42,16 +42,13 @@ function draw() {
 }
 
 function isGameOver() {
-    for (let i = 1; i < snake.length - 1; i++) {
-        if (isSnake(snake.x, snake.y, snake.tail[i].x, snake.tail[i].y)) {
+    for (let i = 1; i < snake.tail.length; i++) {
+        if (snake.x === snake.tail[i].x
+            && snake.y === snake.tail[i].y) {
             return true;
         }
     }
     return false;
-}
-
-function isSnake(newX, newY, x, y) {
-    return (newX === x && newY === y);
 }
 
 function isOutOfBounds() {
@@ -84,22 +81,23 @@ function isFood() {
 function placeFood() {
     do {
         food = {
-            x: randomPos(),
-            y: randomPos()
+            x: randomPosition(),
+            y: randomPosition()
         }
     }
     while (!isEmpty(food.x, food.y));
 }
 
 function isEmpty(x, y) {
-    for (let i = 0; i < snake.length; i++) {
-        if (isSnake(snake.tail[i].x, snake.tail[i].y, x, y)) {
+    for (let i = 0; i < snake.tail.length; i++) {
+        if (snake.tail[i].x === x
+            && snake.tail[i].y === y) {
             return false;
         }
     }
     return true;
 }
 
-function randomPos() {
+function randomPosition() {
     return Math.floor((Math.random() * (board.width - (2 * offset))) + offset);
 }

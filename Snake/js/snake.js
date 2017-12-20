@@ -4,7 +4,7 @@ function Snake(x, y) {
     this.xSpeed = 0;
     this.ySpeed = 0;
     this.length = 1;
-    this.tail = [new vector(this.x, this.y)];
+    this.tail = [new Vector(this.x, this.y)];
 
     this.direction = function (x, y) {
         this.xSpeed = x;
@@ -18,7 +18,7 @@ function Snake(x, y) {
             }
             this.tail.pop();
         }
-        this.tail.push(new vector(this.x, this.y));
+        this.tail.push(new Vector(this.x, this.y));
 
         this.x += this.xSpeed;
         this.y += this.ySpeed;
@@ -26,11 +26,11 @@ function Snake(x, y) {
 
     this.eatFood = function (x, y) {
         this.length++;
-        this.tail.push(new vector(x, y));
+        this.tail.push(new Vector(x, y));
     };
 }
 
-const vector = function (x, y) {
+function Vector(x, y) {
     this.x = x;
     this.y = y;
-};
+}

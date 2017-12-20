@@ -1,12 +1,16 @@
 function drawFrame() {
-    fillStyle("#3b3b3b");
     for (let row = 0; row < board.height; row++) {
         for (let col = 0; col < board.width; col++) {
+            fillStyle("#000000");
             if (col === 0 || col === board.width - 1) {
-                fillRect(col, row, 1, -2);
+                fillRect(col, row, 2, -4);
+                fillStyle("#ffffff");
+                fillRect(col, row, 3, -6);
             }
             if (row === 0 || row === board.height - 1) {
-                fillRect(col, row, 1, -2);
+                fillRect(col, row, 2, -4);
+                fillStyle("#ffffff");
+                fillRect(col, row, 3, -6);
             }
         }
     }
@@ -21,10 +25,6 @@ function drawBoard() {
     }
 }
 
-function drawScore() {
-
-}
-
 function updateScore() {
     fillStyle("#828282");
     context.font = "16px Arial";
@@ -32,20 +32,23 @@ function updateScore() {
 }
 
 function drawSnake() {
-    fillStyle("#0bac0a");
-    for (let i = 0; i < snake.length; i++) {
-        if (i === snake.length - 1) {
+    for (let i = 0; i < snake.tail.length; i++) {
+        if (i === snake.tail.length - 1) {
             fillStyle("#d1d1d1");
+        } else{
+            fillStyle("#0bac0a");
         }
         fillRect(snake.tail[i].x, snake.tail[i].y, 1, -2);
+        fillStyle("#000000");
+        fillRect(snake.tail[i].x, snake.tail[i].y, 2, -4);
     }
 }
 
 function drawFood(x, y) {
-    fillStyle("#bf1020");
-    fillRect(x, y, 1, -2);
     fillStyle("#e3220b");
-    fillRect(x, y, 6, -12);
+    fillRect(x, y, 1, -2);
+    fillStyle("#000000");
+    fillRect(x, y, 2, -4);
 }
 
 function fillRect(x, y, dx, dy) {
