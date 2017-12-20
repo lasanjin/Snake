@@ -10,7 +10,7 @@ document.addEventListener("keydown", function (event) {
 });
 
 function actOnKeys() {
-    while (keys.length > 0) {
+    if (keys.length > 0) {
         switch (keys[0]) {
             case 37: //LEFT
                 snake.direction(-1, 0);
@@ -27,7 +27,8 @@ function actOnKeys() {
             default:
                 break;
         }
-        keys.pop();
+        keys.shift();
+        console.log(keys);
     }
 }
 

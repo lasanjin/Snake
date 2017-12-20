@@ -7,7 +7,7 @@ run();
 
 function initGame() {
     snake = new Snake(board.width / 2, board.height / 2);
-    drawFrame();
+    //drawFrame();
     placeFood();
     tick = 0;
 }
