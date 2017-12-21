@@ -69,27 +69,33 @@ function addNeighbors() {
 function search() {
     while (openSet.length > 0) {
         let min = 0;
-
-        for (let i = 0; i < openSet.length; i++) {
-            if (openSet[i].f < openSet[min].f) {
-                min = i;
-            }
-        }
+        min = getMinFFromOpenSet(min);
 
         let current = openSet[min];
 
-        if (current.x === destination.x
-            && current.y === destination.y) {
-
+        if (isDestination(current)) {
             findPath(current);
         }
-
         let index = openSet.indexOf(current);
         openSet.splice(index, 1);
         closedSet.push(current);
 
         evaluateNeighbours(current);
     }
+}
+
+function getMinFFromOpenSet(min) {
+    for (let i = 0; i < openSet.length; i++) {
+        if (openSet[i].f < openSet[min].f) {
+            return i;
+        }
+    }
+    return min;
+}
+
+function isDestination(current) {
+    return (current.x === destination.x
+        && current.y === destination.y);
 }
 
 function evaluateNeighbours(current) {
