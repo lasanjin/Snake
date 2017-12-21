@@ -3,9 +3,14 @@ const keys = [];
 
 document.addEventListener("keydown", function (event) {
     let key = event.keyCode;
+    if (key === 32) {
+        takeControl = false;
+        directions = getDirections();
+    }
     if (checkDirection(key)) {
         previous = key;
         keys.push(key);
+        takeControl = true;
     }
 });
 
@@ -28,11 +33,13 @@ function actOnKeys() {
                 break;
         }
         keys.shift();
-        console.log(keys);
     }
 }
 
 function checkDirection(key) {
+    if (key === 32) {
+        return false;
+    }
     switch (previous) {
         case 37: //LEFT
             return key !== 39;
@@ -44,5 +51,20 @@ function checkDirection(key) {
             return key !== 38;
         default:
             return true;
+    }
+}
+
+function logPrevious(dirX, dirY) {
+    if(dirX === -1 && dirY === 0) {
+        previous = 37;
+    }
+    if(dirX === 1 && dirY === 0) {
+        previous = 39;
+    }
+    if(dirX === 0 && dirY === -1) {
+        previous = 38;
+    }
+    if(dirX === 0 && dirY === 1) {
+        previous = 40;
     }
 }

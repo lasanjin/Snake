@@ -1,21 +1,28 @@
 let snake;
 let food;
 let tick;
+let directions;
+let takeControl;
 
 initGame();
 run();
 
 function initGame() {
     snake = new Snake(board.width / 2, board.height / 2);
-    //drawFrame();
     placeFood();
+    directions = getDirections();
+    takeControl = false;
     tick = 0;
 }
 
 function run() {
     if (tick > interval) {
         actOnKeys();
-
+        if (!takeControl) {
+            translateDirection();
+        }
+        snake.update();
+        draw();
         if (isGameOver()) {
             initGame();
         }
@@ -25,13 +32,25 @@ function run() {
         if (isFood()) {
             snake.eatFood(food.x, food.y);
             placeFood();
+            directions = getDirections();
         }
-        snake.update();
-        draw();
         tick = 0;
     }
     tick += fps;
     requestAnimationFrame(run);
+}
+
+function translateDirection() {
+    if (directions.length > 0) {
+        let direction = directions[0];
+        let dirX = direction.x - snake.x;
+        let dirY = direction.y - snake.y;
+        logPrevious(dirX, dirY);
+        snake.direction(dirX, dirY);
+        directions.shift();
+    } else {
+        directions = getDirections();
+    }
 }
 
 function draw() {
@@ -52,25 +71,25 @@ function isGameOver() {
 }
 
 function isOutOfBounds() {
-    return (snake.x < offset || snake.x >= board.width - offset
-        || snake.y < offset || snake.y >= board.height - offset);
+    return (snake.x < 0 || snake.x >= board.width
+        || snake.y < 0 || snake.y >= board.height);
 }
 
 /**
  * Border is shifted by 1 in order to draw frame.
  */
 function goThroughWall() {
-    if (snake.x < offset) {
-        snake.x = board.width - 1 - offset;
+    if (snake.x < 0) {
+        snake.x = board.width - 1;
     }
-    if (snake.x >= board.width - offset) {
-        snake.x = offset;
+    if (snake.x >= board.width) {
+        snake.x = 0;
     }
-    if (snake.y < offset) {
-        snake.y = board.height - 1 - offset;
+    if (snake.y < 0) {
+        snake.y = board.height - 1;
     }
-    if (snake.y >= board.height - offset) {
-        snake.y = offset;
+    if (snake.y >= board.height) {
+        snake.y = 0;
     }
 }
 
@@ -99,5 +118,5 @@ function isEmpty(x, y) {
 }
 
 function randomPosition() {
-    return Math.floor((Math.random() * (board.width - (2 * offset))) + offset);
+    return Math.floor((Math.random() * board.width));
 }
