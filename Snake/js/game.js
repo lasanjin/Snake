@@ -19,11 +19,11 @@ function run() {
     if (tick > interval) {
         actOnKeys();
         if (!takeControl) {
-            translateDirection();
+            calcDirection();
         }
         snake.update();
         draw();
-        if (isGameOver()) {
+        if (hasCollided()) {
             initGame();
         }
         if (isOutOfBounds()) {
@@ -31,8 +31,12 @@ function run() {
         }
         if (isFood()) {
             snake.eatFood(food.x, food.y);
-            placeFood();
-            directions = getDirections();
+            if (isGameOver()) {
+                initGame();
+            } else {
+                placeFood();
+                directions = getDirections();
+            }
         }
         tick = 0;
     }
@@ -40,11 +44,12 @@ function run() {
     requestAnimationFrame(run);
 }
 
-function translateDirection() {
+function calcDirection() {
     if (directions.length > 0) {
         let direction = directions[0];
         let dirX = direction.x - snake.x;
         let dirY = direction.y - snake.y;
+
         logPrevious(dirX, dirY);
         snake.direction(dirX, dirY);
         directions.shift();
@@ -60,7 +65,7 @@ function draw() {
     drawSnake(snake.x, snake.y);
 }
 
-function isGameOver() {
+function hasCollided() {
     for (let i = 1; i < snake.tail.length; i++) {
         if (snake.x === snake.tail[i].x
             && snake.y === snake.tail[i].y) {
@@ -95,6 +100,10 @@ function goThroughWall() {
 
 function isFood() {
     return (snake.x === food.x && snake.y === food.y);
+}
+
+function isGameOver() {
+    return (snake.length === WIN_CONDITION);
 }
 
 function placeFood() {

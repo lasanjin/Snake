@@ -11,3 +11,4 @@ const board = {
 };
 
 const OBSTACLE = null;
+const WIN_CONDITION = board.width * board.height;
